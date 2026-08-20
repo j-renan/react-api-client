@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import Loading from "./components/Loading";
+import ErrorMessage from "./components/ErrorMessage";
+import UserList from "./components/UserList";
+import Header from "./components/Header";
 
 
 function App() {
@@ -59,41 +63,24 @@ function App() {
         buscarPosts();
     }, []);
 
-
-
     return (
         <div>
-            <h1>Catálogo de Usuários</h1>
+            <Header titulo="Catálogo de Usuários" />
 
             {carregando && (
-                <p>Carregando usuários...</p>
+                <Loading />
             )}
-
-            <p>
-                Usuários encontrados: {usuarios.length}
-            </p>
 
             {erro && (
-                <p>{erro}</p>
+                <ErrorMessage
+                    mensagem={erro}
+                />
             )}
+
             {!carregando && !erro && (
-                <ul>                
-                    {usuarios.map(usuario => (
-                            <li key={usuario.id}>
-                                <hr />
-                                <strong>{usuario.name}</strong>
-                                <br /><br />
-                                Usuário: {usuario.username}
-                                <br />
-                                E-mail: {usuario.email}
-                                <br />
-                                Telefone: {usuario.phone}
-                                <br />
-                                Cidade: {usuario.address.city}
-                            </li>
-                        )
-                    )}
-                </ul>
+                <UserList
+                    usuarios={usuarios}
+                />
             )}
         </div>
     );
