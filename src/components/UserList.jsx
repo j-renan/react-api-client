@@ -1,6 +1,6 @@
 import UserCard from "./UserCard";
 
-function UserList({ usuarios }) {
+function UserList({ usuarios, onSelecionarUsuario }) {
     return (
         <ul>
             <p>Total de usuários: {usuarios.length}</p>
@@ -8,6 +8,7 @@ function UserList({ usuarios }) {
                 <UserCard
                     key={usuario.id}
                     usuario={usuario}
+                    onSelecionarUsuario={onSelecionarUsuario}
                 />
             ))}
         </ul>

@@ -1,4 +1,4 @@
-function UserCard({ usuario }) {
+function UserCard({ usuario, onSelecionarUsuario }) {
     return (
         <li>
             <strong>{usuario.name}</strong>
@@ -12,6 +12,13 @@ function UserCard({ usuario }) {
             Cidade: {usuario.address.city}
             <br />
             Website: {usuario.website}
+            <br />
+            <button
+                onClick={() => {
+                    onSelecionarUsuario(usuario.id);
+                }}>
+                Ver detalhes
+            </button>
         </li>
     );
 }

@@ -3,6 +3,18 @@ import Loading from "./components/Loading";
 import ErrorMessage from "./components/ErrorMessage";
 import UserList from "./components/UserList";
 import Header from "./components/Header";
+import UserDetails from "./components/UserDetails";
+
+
+const filtrarUsuarioPorTermo = (termo) => (usuario) => {
+    const termoLower = termo.toLowerCase();
+
+    return (
+        usuario.name.toLowerCase().includes(termoLower) ||
+        usuario.username.toLowerCase().includes(termoLower) ||
+        usuario.email.toLowerCase().includes(termoLower) 
+    );
+};
 
 
 function App() {
@@ -10,6 +22,31 @@ function App() {
     const [usuarios, setUsuarios] = useState([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState(null);
+    const [busca, setBusca] = useState("");
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
+
+    const usuariosFiltrados = usuarios.filter(filtrarUsuarioPorTermo(busca));
+
+    async function buscarUsuario(id) {
+        console.log("buscando usuário com id:", id);
+        try {
+            const response = await fetch(
+                `${url}/users/${id}`
+            );
+            if (!response.ok) {
+                throw new Error(
+                    `Erro HTTP: ${response.status}`
+                );
+            }
+            const data = await response.json();
+            setUsuarioSelecionado(data);
+        } catch (error) {
+            console.error(
+                "Erro ao buscar usuário:",
+                error
+            );
+        }
+    }
 
     async function buscarUsuarios() {
         try {
@@ -67,6 +104,14 @@ function App() {
         <div>
             <Header titulo="Catálogo de Usuários" />
 
+            <input
+                type="text"
+                placeholder="Buscar usuário..."
+                    onChange={(evento) => {
+                    setBusca(evento.target.value);
+                }}
+            />
+
             {carregando && (
                 <Loading />
             )}
@@ -77,10 +122,29 @@ function App() {
                 />
             )}
 
-            {!carregando && !erro && (
-                <UserList
-                    usuarios={usuarios}
-                />
+            {!carregando && !erro && (                
+                <>
+                    <p>
+                        {usuariosFiltrados.length} usuário(s) encontrado(s)
+                    </p>
+
+                    {usuariosFiltrados.length > 0 ? (
+                        <UserList
+                            usuarios={usuariosFiltrados}
+                            onSelecionarUsuario={buscarUsuario}
+                        />
+                    ) : (
+                        <p>
+                            Nenhum usuário encontrado.
+                        </p>
+                    )}
+
+                    {usuarioSelecionado && (
+                        <UserDetails
+                            usuario={usuarioSelecionado}
+                        />
+                    )}
+                </>
             )}
         </div>
     );
