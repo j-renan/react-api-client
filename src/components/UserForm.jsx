@@ -4,15 +4,25 @@ function UserForm({ onCadastrar }) {
     const [nome, setNome] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [telefone, setTelefone] = useState("");
 
     function handleSubmit(evento) {
         evento.preventDefault();
         const novoUsuario = {
             name: nome,
             username: username,
-            email: email
+            email: email,
+            phone: telefone,
         };
         onCadastrar(novoUsuario);
+        limparFormulario();
+    }
+
+    function limparFormulario() {
+        setNome("");
+        setUsername("");
+        setEmail("");
+        setTelefone("");
     }
 
     return (
@@ -44,7 +54,17 @@ function UserForm({ onCadastrar }) {
                 }}
             />
 
-            <button type="submit">
+            <input
+                type="text"
+                placeholder="Telefone"
+                value={telefone}
+                onChange={(evento) => {
+                    setTelefone(evento.target.value);
+                }}
+            />
+
+            <button 
+                type="submit">
                 Cadastrar
             </button>
         </form>

@@ -5,6 +5,8 @@ import UserList from "./components/UserList";
 import Header from "./components/Header";
 import UserDetails from "./components/UserDetails";
 import UserForm from "./components/UserForm";
+import NovoUsuario from "./components/NovoUsuario";
+import SuccessMessage from "./components/SuccessMessage";
 
 
 const filtrarUsuarioPorTermo = (termo) => (usuario) => {
@@ -25,6 +27,8 @@ function App() {
     const [erro, setErro] = useState(null);
     const [busca, setBusca] = useState("");
     const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
+    const [mensagem, setMensagem] = useState(null);
+    const [novoUsuario, setNovoUsuario] = useState(null);
 
     const usuariosFiltrados = usuarios.filter(filtrarUsuarioPorTermo(busca));
 
@@ -123,6 +127,8 @@ function App() {
             }
 
             const data = await response.json();
+            setNovoUsuario(data);
+            setMensagem(`Usuário ${data.name} cadastrado com sucesso!`);
             console.log("Usuário cadastrado:", data);
         } catch (error) {
             console.error(
@@ -186,6 +192,18 @@ function App() {
                     <UserForm
                         onCadastrar={cadastrarUsuario}
                     />
+
+                    {mensagem && (
+                        <SuccessMessage 
+                            mensagem={mensagem}
+                        />                    
+                    )}  
+
+                    {novoUsuario && (
+                        <NovoUsuario
+                            novoUsuario={novoUsuario}
+                        />
+                    )}
                 </>
             )}
             
