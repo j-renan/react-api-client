@@ -4,6 +4,7 @@ import ErrorMessage from "./components/ErrorMessage";
 import UserList from "./components/UserList";
 import Header from "./components/Header";
 import UserDetails from "./components/UserDetails";
+import UserForm from "./components/UserForm";
 
 
 const filtrarUsuarioPorTermo = (termo) => (usuario) => {
@@ -98,6 +99,37 @@ function App() {
 
     function limparDetalhesUsuario() {
         setUsuarioSelecionado(null);
+    }    
+
+    async function cadastrarUsuario(usuario) {
+        try {
+            const response = await fetch(
+                "https://jsonplaceholder.typicode.com/users",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(usuario)
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    `Erro HTTP: ${response.status}`
+                );
+            }
+
+            const data = await response.json();
+            console.log("Usuário cadastrado:", data);
+        } catch (error) {
+            console.error(
+                "Erro ao cadastrar usuário:",
+                error
+            );
+        }
     }
 
     useEffect(() => {
@@ -150,8 +182,13 @@ function App() {
                             onFecharDetalhes={limparDetalhesUsuario}
                         />
                     )}
+
+                    <UserForm
+                        onCadastrar={cadastrarUsuario}
+                    />
                 </>
             )}
+            
         </div>
     );
 }
