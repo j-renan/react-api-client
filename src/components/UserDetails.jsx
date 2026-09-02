@@ -1,4 +1,4 @@
-function UserDetails({ usuario }) {
+function UserDetails({ usuario, onFecharDetalhes }) {
 
     return (
         <div>
@@ -33,6 +33,35 @@ function UserDetails({ usuario }) {
                 <strong>Website:</strong>{" "}
                 {usuario.website}
             </p>
+
+            <p>
+                <strong>Empresa:</strong>{" "}
+                {usuario.company.name}
+            </p>
+
+            <p>
+                <strong>Rua:</strong>{" "}
+                {usuario.address.street}                              
+            </p>
+
+            <p>
+                <strong>Complemento:</strong>{" "}
+                {usuario.address.suite}                              
+            </p>
+
+            <p>
+                <strong>Cidade:</strong>{" "}
+                {usuario.address.city}                              
+            </p>
+
+            <p>
+                <strong>CEP:</strong>{" "}
+                {usuario.address.zipcode}                              
+            </p>
+
+            <button
+                onClick={onFecharDetalhes}
+            >Fechar</button>
         </div>
     );
 }

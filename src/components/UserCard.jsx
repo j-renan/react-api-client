@@ -3,7 +3,7 @@ function UserCard({ usuario, onSelecionarUsuario }) {
         <li>
             <strong>{usuario.name}</strong>
             <br />
-            Usuário: {usuario.username}
+            {/* Usuário: {usuario.username}
             <br />
             E-mail: {usuario.email}
             <br />
@@ -12,7 +12,7 @@ function UserCard({ usuario, onSelecionarUsuario }) {
             Cidade: {usuario.address.city}
             <br />
             Website: {usuario.website}
-            <br />
+            <br /> */}
             <button
                 onClick={() => {
                     onSelecionarUsuario(usuario.id);

@@ -40,6 +40,7 @@ function App() {
             }
             const data = await response.json();
             setUsuarioSelecionado(data);
+            console.log("dados usuario:", data);
         } catch (error) {
             console.error(
                 "Erro ao buscar usuário:",
@@ -95,6 +96,10 @@ function App() {
         }
     }
 
+    function limparDetalhesUsuario() {
+        setUsuarioSelecionado(null);
+    }
+
     useEffect(() => {
         buscarUsuarios();
         buscarPosts();
@@ -142,6 +147,7 @@ function App() {
                     {usuarioSelecionado && (
                         <UserDetails
                             usuario={usuarioSelecionado}
+                            onFecharDetalhes={limparDetalhesUsuario}
                         />
                     )}
                 </>
