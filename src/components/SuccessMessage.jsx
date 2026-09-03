@@ -1,6 +1,6 @@
 function SuccessMessage({ mensagem }) {
     return (
-        <p>{mensagem}</p>
+        <p className="feedback feedback--success" role="status">{mensagem}</p>
     );    
 }
 

@@ -26,48 +26,61 @@ function UserForm({ onCadastrar }) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
+        <section className="panel form-panel" aria-labelledby="form-heading">
+            <div className="form-heading">
+                <div>
+                    <h2 id="form-heading">Adicionar usuário</h2>
+                    <p>Registre uma nova pessoa no diretório.</p>
+                </div>
+            </div>
+            <form className="user-form" onSubmit={handleSubmit}>
+                <div className="field">
+                    <label htmlFor="nome">Nome</label>
+                    <input id="nome"
                 type="text"
-                placeholder="Nome"
                 value={nome}
                 onChange={(evento) => {
                     setNome(evento.target.value);
                 }}
-            />
+                    />
+                </div>
 
-            <input
+                <div className="field">
+                    <label htmlFor="username">Usuário</label>
+                    <input id="username"
                 type="text"
-                placeholder="Usuário"
                 value={username}
                 onChange={(evento) => {
                     setUsername(evento.target.value);
                 }}
-            />
+                    />
+                </div>
 
-            <input
+                <div className="field">
+                    <label htmlFor="email">E-mail</label>
+                    <input id="email"
                 type="email"
-                placeholder="E-mail"
                 value={email}
                 onChange={(evento) => {
                     setEmail(evento.target.value);
                 }}
-            />
+                    />
+                </div>
 
-            <input
+                <div className="field">
+                    <label htmlFor="telefone">Telefone</label>
+                    <input id="telefone"
                 type="text"
-                placeholder="Telefone"
                 value={telefone}
                 onChange={(evento) => {
                     setTelefone(evento.target.value);
                 }}
-            />
+                    />
+                </div>
 
-            <button 
-                type="submit">
-                Cadastrar
-            </button>
-        </form>
+                <button className="submit-button" type="submit">Cadastrar</button>
+            </form>
+        </section>
     );
 }
 

@@ -2,8 +2,7 @@ import UserCard from "./UserCard";
 
 function UserList({ usuarios, onSelecionarUsuario }) {
     return (
-        <ul>
-            <p>Total de usuários: {usuarios.length}</p>
+        <ul className="user-list">
             {usuarios.map(usuario => (
                 <UserCard
                     key={usuario.id}

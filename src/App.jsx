@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import Loading from "./components/Loading";
 import ErrorMessage from "./components/ErrorMessage";
 import UserList from "./components/UserList";
@@ -35,15 +36,10 @@ function App() {
     async function buscarUsuario(id) {
         console.log("buscando usuário com id:", id);
         try {
-            const response = await fetch(
+            const response = await axios.get(
                 `${url}/users/${id}`
             );
-            if (!response.ok) {
-                throw new Error(
-                    `Erro HTTP: ${response.status}`
-                );
-            }
-            const data = await response.json();
+            const data = response.data;
             setUsuarioSelecionado(data);
             console.log("dados usuario:", data);
         } catch (error) {
@@ -57,15 +53,10 @@ function App() {
     async function buscarUsuarios() {
         try {
             setCarregando(true);
-            const response = await fetch(
+            const response = await axios.get(
                 `${url}/users`
             );
-            if (!response.ok) {
-                throw new Error(
-                    `Erro HTTP: ${response.status}`
-                );
-            }
-            const data = await response.json();
+            const data = response.data;
             setUsuarios(data);
         } catch (error) {
             console.log(
@@ -83,15 +74,10 @@ function App() {
 
     async function buscarPosts() {
         try {
-            const response = await fetch(
+            const response = await axios.get(
                 `${url}/posts`
             );
-            if (!response.ok) {
-                throw new Error(
-                    `Erro HTTP: ${response.status}`
-                );
-            }
-            const data = await response.json();
+            const data = response.data;
             console.log(data);
         } catch (error) {
             console.log(
@@ -107,26 +93,11 @@ function App() {
 
     async function cadastrarUsuario(usuario) {
         try {
-            const response = await fetch(
+            const response = await axios.post(
                 "https://jsonplaceholder.typicode.com/users",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify(usuario)
-                }
+                usuario
             );
-
-            if (!response.ok) {
-                throw new Error(
-                    `Erro HTTP: ${response.status}`
-                );
-            }
-
-            const data = await response.json();
+            const data = response.data;
             setNovoUsuario(data);
             setMensagem(`Usuário ${data.name} cadastrado com sucesso!`);
             console.log("Usuário cadastrado:", data);
@@ -144,43 +115,43 @@ function App() {
     }, []);
 
     return (
-        <div>
+        <main className="app-shell">
             <Header titulo="Catálogo de Usuários" />
 
-            <input
-                type="text"
-                placeholder="Buscar usuário..."
+            <div className="search-bar">
+                <input
+                    type="search"
+                    aria-label="Buscar usuário"
+                    placeholder="Buscar por nome, usuário ou e-mail..."
                     onChange={(evento) => {
-                    setBusca(evento.target.value);
-                }}
-            />
-
-            {carregando && (
-                <Loading />
-            )}
-
-            {erro && (
-                <ErrorMessage
-                    mensagem={erro}
+                        setBusca(evento.target.value);
+                    }}
                 />
-            )}
+            </div>
+
+            {carregando && <Loading />}
+
+            {erro && <ErrorMessage mensagem={erro} />}
 
             {!carregando && !erro && (                
-                <>
-                    <p>
-                        {usuariosFiltrados.length} usuário(s) encontrado(s)
-                    </p>
+                <div className="content-grid">
+                    <section className="content-column" aria-labelledby="users-heading">
+                        <div className="section-heading">
+                            <h2 id="users-heading">Pessoas</h2>
+                            <p className="result-count">
+                                {usuariosFiltrados.length} usuário(s) encontrado(s)
+                            </p>
+                        </div>
 
-                    {usuariosFiltrados.length > 0 ? (
-                        <UserList
-                            usuarios={usuariosFiltrados}
-                            onSelecionarUsuario={buscarUsuario}
-                        />
-                    ) : (
-                        <p>
-                            Nenhum usuário encontrado.
-                        </p>
-                    )}
+                        {usuariosFiltrados.length > 0 ? (
+                            <UserList
+                                usuarios={usuariosFiltrados}
+                                onSelecionarUsuario={buscarUsuario}
+                            />
+                        ) : (
+                            <p className="empty-state">Nenhum usuário encontrado.</p>
+                        )}
+                    </section>
 
                     {usuarioSelecionado && (
                         <UserDetails
@@ -189,25 +160,18 @@ function App() {
                         />
                     )}
 
-                    <UserForm
-                        onCadastrar={cadastrarUsuario}
-                    />
+                    <UserForm onCadastrar={cadastrarUsuario} />
 
                     {mensagem && (
-                        <SuccessMessage 
-                            mensagem={mensagem}
-                        />                    
-                    )}  
+                        <SuccessMessage mensagem={mensagem} />
+                    )}
 
                     {novoUsuario && (
-                        <NovoUsuario
-                            novoUsuario={novoUsuario}
-                        />
+                        <NovoUsuario novoUsuario={novoUsuario} />
                     )}
-                </>
+                </div>
             )}
-            
-        </div>
+        </main>
     );
 }
 

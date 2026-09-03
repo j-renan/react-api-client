@@ -1,6 +1,6 @@
 function ErrorMessage({ mensagem }) {
     return (
-        <p>{mensagem}</p>
+        <p className="feedback feedback--error" role="alert">{mensagem}</p>
     );
 }
 

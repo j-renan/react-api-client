@@ -1,68 +1,24 @@
 function UserDetails({ usuario, onFecharDetalhes }) {
 
     return (
-        <div>
-            <h2>Detalhes do usuário</h2>
-
-            <p>
-                <strong>Nome:</strong>{" "}
-                {usuario.name}
-            </p>
-
-            <p>
-                <strong>Usuário:</strong>{" "}
-                {usuario.username}
-            </p>
-
-            <p>
-                <strong>E-mail:</strong>{" "}
-                {usuario.email}
-            </p>
-
-            <p>
-                <strong>Telefone:</strong>{" "}
-                {usuario.phone}
-            </p>
-
-            <p>
-                <strong>Cidade:</strong>{" "}
-                {usuario.address.city}
-            </p>
-
-            <p>
-                <strong>Website:</strong>{" "}
-                {usuario.website}
-            </p>
-
-            <p>
-                <strong>Empresa:</strong>{" "}
-                {usuario.company.name}
-            </p>
-
-            <p>
-                <strong>Rua:</strong>{" "}
-                {usuario.address.street}                              
-            </p>
-
-            <p>
-                <strong>Complemento:</strong>{" "}
-                {usuario.address.suite}                              
-            </p>
-
-            <p>
-                <strong>Cidade:</strong>{" "}
-                {usuario.address.city}                              
-            </p>
-
-            <p>
-                <strong>CEP:</strong>{" "}
-                {usuario.address.zipcode}                              
-            </p>
-
-            <button
-                onClick={onFecharDetalhes}
-            >Fechar</button>
-        </div>
+        <aside className="panel details-panel" aria-labelledby="details-heading">
+            <div className="details-panel__top">
+                <h2 id="details-heading">Detalhes do usuário</h2>
+                <button className="close-button" aria-label="Fechar detalhes" onClick={onFecharDetalhes}>×</button>
+            </div>
+            <dl className="detail-list">
+                <div className="detail-row"><dt>Nome</dt><dd>{usuario.name}</dd></div>
+                <div className="detail-row"><dt>Usuário</dt><dd>{usuario.username}</dd></div>
+                <div className="detail-row"><dt>E-mail</dt><dd>{usuario.email}</dd></div>
+                <div className="detail-row"><dt>Telefone</dt><dd>{usuario.phone}</dd></div>
+                <div className="detail-row"><dt>Cidade</dt><dd>{usuario.address.city}</dd></div>
+                <div className="detail-row"><dt>Website</dt><dd>{usuario.website}</dd></div>
+                <div className="detail-row"><dt>Empresa</dt><dd>{usuario.company.name}</dd></div>
+                <div className="detail-row"><dt>Rua</dt><dd>{usuario.address.street}</dd></div>
+                <div className="detail-row"><dt>Complemento</dt><dd>{usuario.address.suite}</dd></div>
+                <div className="detail-row"><dt>CEP</dt><dd>{usuario.address.zipcode}</dd></div>
+            </dl>
+        </aside>
     );
 }
 

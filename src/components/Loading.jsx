@@ -1,6 +1,6 @@
 function Loading() {
     return (
-        <p>Carregando usuários...</p>
+        <p className="feedback feedback--loading" role="status">Carregando usuários...</p>
     );
 }
 

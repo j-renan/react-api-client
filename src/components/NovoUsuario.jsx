@@ -1,8 +1,8 @@
 function NovoUsuario({ novoUsuario }) {
 
     return (
-        <div>
-            <h2>Novo usuário cadastrado</h2>
+        <section className="panel new-user-panel" aria-labelledby="new-user-heading">
+            <h2 id="new-user-heading">Novo usuário cadastrado</h2>
 
             <p>
                 <strong>Nome:</strong>{" "}
@@ -18,7 +18,7 @@ function NovoUsuario({ novoUsuario }) {
                 <strong>E-mail:</strong>{" "}
                 {novoUsuario.email}
             </p>           
-        </div>
+        </section>
     );
 }
 
