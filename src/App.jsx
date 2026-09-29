@@ -1,54 +1,55 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Loading from "./components/Loading";
-import ErrorMessage from "./components/ErrorMessage";
-import UserList from "./components/UserList";
-import Header from "./components/Header";
-import UserDetails from "./components/UserDetails";
-import UserForm from "./components/UserForm";
-import NovoUsuario from "./components/NovoUsuario";
+
+import HeaderComponent from "./components/HeaderComponent";
+import LoadingComponent from "./components/LoadingComponent";
+import UserListComponent from "./components/UserListComponent";
+
+import "./App.css";
+import UserDetailsComponent from "./components/UserDetailsComponent";
+import UserFormComponent from "./components/UserFormComponent";
+import ModalComponent from "./components/ModalComponent";
 import SuccessMessage from "./components/SuccessMessage";
+import NovoUsuarioComponent from "./components/NovoUsuarioComponent";
 
 
 const filtrarUsuarioPorTermo = (termo) => (usuario) => {
     const termoLower = termo.toLowerCase();
-
     return (
         usuario.name.toLowerCase().includes(termoLower) ||
         usuario.username.toLowerCase().includes(termoLower) ||
-        usuario.email.toLowerCase().includes(termoLower) 
+        usuario.email.toLowerCase().includes(termoLower)
     );
 };
 
 
 function App() {
     const url = "https://jsonplaceholder.typicode.com";
+
     const [usuarios, setUsuarios] = useState([]);
-    const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState(null);
+    const [carregando, setCarregando] = useState(true);
     const [busca, setBusca] = useState("");
-    const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState(null)
+    const [modalNovoUsuarioAberto, setModalNovoUsuarioAberto] = useState(false)
     const [mensagem, setMensagem] = useState(null);
     const [novoUsuario, setNovoUsuario] = useState(null);
 
-    const usuariosFiltrados = usuarios.filter(filtrarUsuarioPorTermo(busca));
+    const usuariosFiltrados = usuarios
+        .filter(filtrarUsuarioPorTermo(busca));
 
     async function buscarUsuario(id) {
-        console.log("buscando usuário com id:", id);
         try {
             const response = await axios.get(
                 `${url}/users/${id}`
-            );
-            const data = response.data;
-            setUsuarioSelecionado(data);
-            console.log("dados usuario:", data);
+            )
+            const data = response.data
+            setUsuarioSelecionado(data)
         } catch (error) {
-            console.error(
-                "Erro ao buscar usuário:",
-                error
-            );
+            console.log("Erro ao buscar usuário: ", error)
         }
     }
+
 
     async function buscarUsuarios() {
         try {
@@ -56,13 +57,15 @@ function App() {
             const response = await axios.get(
                 `${url}/users`
             );
+
             const data = response.data;
+
             setUsuarios(data);
         } catch (error) {
             console.log(
-                "Erro ao buscar usuários:",
+                "Erro ao buscar usuários: ",
                 error
-            );            
+            );
             setErro(
                 `Não foi possível carregar os usuários. Código: ${error.message}`
             );
@@ -72,106 +75,105 @@ function App() {
         }
     }
 
-    async function buscarPosts() {
-        try {
-            const response = await axios.get(
-                `${url}/posts`
-            );
-            const data = response.data;
-            console.log(data);
-        } catch (error) {
-            console.log(
-                "Erro ao buscar posts:",
-                error
-            );
-        }
-    }
-
     function limparDetalhesUsuario() {
-        setUsuarioSelecionado(null);
-    }    
+        setUsuarioSelecionado(null)
+    }
 
     async function cadastrarUsuario(usuario) {
         try {
             const response = await axios.post(
-                "https://jsonplaceholder.typicode.com/users",
-                usuario
-            );
-            const data = response.data;
-            setNovoUsuario(data);
-            setMensagem(`Usuário ${data.name} cadastrado com sucesso!`);
-            console.log("Usuário cadastrado:", data);
+                `${url}/users`, usuario
+            )
+            const data = response.data
+            setNovoUsuario(data)
+            setUsuarios([...usuarios, data])
+            setErro(null)
+            setMensagem("Usuário cadastrado com sucesso!")
+            setModalNovoUsuarioAberto(false)
         } catch (error) {
-            console.error(
-                "Erro ao cadastrar usuário:",
-                error
-            );
+            console.log("Erro ao cadastrar usuário: ", error)
         }
     }
 
     useEffect(() => {
         buscarUsuarios();
-        buscarPosts();
     }, []);
 
+
     return (
-        <main className="app-shell">
-            <Header titulo="Catálogo de Usuários" />
+        <div className="app">
+            <HeaderComponent
+                busca={busca}
+                setBusca={setBusca}
+            />
+            <button
+                className="botao-novo-usuario"
+                type="button"
+                onClick={() => setModalNovoUsuarioAberto(true)}
+            >
+                Novo Usuário
+            </button>
+            {carregando && (
+                <LoadingComponent />
+            )}
 
-            <div className="search-bar">
-                <input
-                    type="search"
-                    aria-label="Buscar usuário"
-                    placeholder="Buscar por nome, usuário ou e-mail..."
-                    onChange={(evento) => {
-                        setBusca(evento.target.value);
-                    }}
-                />
-            </div>
+            <p className="informacao">
+                Usuários encontrados: {usuarios.length}
+            </p>
 
-            {carregando && <Loading />}
+            {erro && (
+                <p className="erro">
+                    {erro}
+                </p>
+            )}
 
-            {erro && <ErrorMessage mensagem={erro} />}
 
-            {!carregando && !erro && (                
-                <div className="content-grid">
-                    <section className="content-column" aria-labelledby="users-heading">
-                        <div className="section-heading">
-                            <h2 id="users-heading">Pessoas</h2>
-                            <p className="result-count">
-                                {usuariosFiltrados.length} usuário(s) encontrado(s)
-                            </p>
-                        </div>
+            {!carregando && !erro && (
+                <>
+                    <p className="informacao">
+                        {usuariosFiltrados.length} usuário(s) encontrado(s)
+                    </p>
 
-                        {usuariosFiltrados.length > 0 ? (
-                            <UserList
-                                usuarios={usuariosFiltrados}
-                                onSelecionarUsuario={buscarUsuario}
-                            />
-                        ) : (
-                            <p className="empty-state">Nenhum usuário encontrado.</p>
-                        )}
-                    </section>
-
-                    {usuarioSelecionado && (
-                        <UserDetails
-                            usuario={usuarioSelecionado}
-                            onFecharDetalhes={limparDetalhesUsuario}
+                    {usuariosFiltrados.length > 0 ? (
+                        <UserListComponent
+                            usuarios={usuariosFiltrados}
+                            onSelecionarUsuario={buscarUsuario}
                         />
+                    ) : (
+                        <p className="sem-resultados">
+                            Nenhum usuário encontrado.
+                        </p>
                     )}
 
-                    <UserForm onCadastrar={cadastrarUsuario} />
+                    {usuarioSelecionado && (
+                        <ModalComponent onFechar={limparDetalhesUsuario}>
+                            <UserDetailsComponent
+                                usuario={usuarioSelecionado}
+                                onFecharDetalhes={limparDetalhesUsuario}
+                            />
+                        </ModalComponent>
+                    )}
 
                     {mensagem && (
                         <SuccessMessage mensagem={mensagem} />
                     )}
 
                     {novoUsuario && (
-                        <NovoUsuario novoUsuario={novoUsuario} />
+                        <NovoUsuarioComponent novoUsuario={novoUsuario} />
                     )}
-                </div>
+
+                </>
             )}
-        </main>
+
+            {modalNovoUsuarioAberto && (
+                <ModalComponent
+                    titulo="Novo usuário"
+                    onFechar={() => setModalNovoUsuarioAberto(false)}
+                >
+                    <UserFormComponent onCadastrar={cadastrarUsuario} />
+                </ModalComponent>
+            )}
+        </div>
     );
 }
 
