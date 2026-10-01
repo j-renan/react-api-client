@@ -16,6 +16,7 @@ import ExcluirUsusarioComponent from "./components/ExcluirUsuarioComponent";
 
 const filtrarUsuarioPorTermo = (termo) => (usuario) => {
     const termoLower = termo.toLowerCase();
+    console.log("Filtrando usuário: ", usuario, " com termo: ", termoLower);
     return (
         usuario.name.toLowerCase().includes(termoLower) ||
         usuario.username.toLowerCase().includes(termoLower) ||
@@ -51,7 +52,6 @@ function App() {
                 `${url}/users/${id}`
             )
             const data = response.data
-            // setUsuarioSelecionado(data)
             return data
         } catch (error) {
             console.log("Erro ao buscar usuário: ", error)
@@ -153,12 +153,13 @@ function App() {
             >
                 Novo Usuário
             </button>
+
             {carregando && (
                 <LoadingComponent />
             )}
 
             <p className="informacao">
-                Usuários encontrados: {usuarios.length}
+                Total de usuários: {usuarios.length}
             </p>
 
             {erro && (
@@ -170,9 +171,11 @@ function App() {
 
             {!carregando && !erro && (
                 <>
-                    <p className="informacao">
-                        {usuariosFiltrados.length} usuário(s) encontrado(s)
-                    </p>
+                    {usuariosFiltrados.length > 0 ? (
+                        <p className="informacao">
+                            {usuariosFiltrados.length} usuário(s) encontrado(s)
+                        </p>
+                    ) : (<div></div>)}
 
                     {usuariosFiltrados.length > 0 ? (
                         <UserListComponent

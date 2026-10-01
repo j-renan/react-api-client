@@ -185,10 +185,9 @@ body {
 
 .email {
     margin: 0;
-
     color: #d1d5db;
-
     font-size: 0.95rem;
+    margin-bottom: 10px;
 }
 
 
@@ -215,9 +214,10 @@ button {
     justify-content: center;
     min-height: 42px;
     padding: 10px 16px;
-    border: 1px solid #6366f1;
+    margin: 0 8px 8px 0;
+    border: 1px solid #64748b;
     border-radius: 8px;
-    background: #4f46e5;
+    background: #475569;
     color: #ffffff;
     font: inherit;
     font-size: 0.95rem;
@@ -227,9 +227,9 @@ button {
 }
 
 button:hover {
-    border-color: #818cf8;
-    background: #4338ca;
-    box-shadow: 0 5px 16px rgba(79, 70, 229, 0.28);
+    border-color: #94a3b8;
+    background: #334155;
+    box-shadow: 0 5px 16px rgba(15, 23, 42, 0.28);
     transform: translateY(-1px);
 }
 
@@ -244,6 +244,58 @@ button:focus-visible {
 
 .botao-novo-usuario {
     margin: 0 0 12px;
+    border-color: #2563eb;
+    background: #1d4ed8;
+}
+
+.botao-novo-usuario:hover {
+    border-color: #60a5fa;
+    background: #1e40af;
+}
+
+.botao-cadastrar {
+    border-color: #16a34a;
+    background: #15803d;
+    margin: 4px 0 0;
+}
+
+.botao-cadastrar:hover {
+    border-color: #4ade80;
+    background: #166534;
+}
+
+.botao-detalhes {
+    border-color: #0d9488;
+    background: #0f766e;
+}
+
+.botao-detalhes:hover {
+    border-color: #2dd4bf;
+    background: #115e59;
+}
+
+.botao-excluir,
+.botao-confirmar-exclusao {
+    border-color: #dc2626;
+    background: #b91c1c;
+}
+
+.botao-excluir:hover,
+.botao-confirmar-exclusao:hover {
+    border-color: #f87171;
+    background: #991b1b;
+}
+
+.botao-cancelar,
+.botao-fechar-detalhes {
+    border-color: #64748b;
+    background: #475569;
+}
+
+.botao-cancelar:hover,
+.botao-fechar-detalhes:hover {
+    border-color: #cbd5e1;
+    background: #334155;
 }
 
 .novo-usuario__sobretitulo {
@@ -352,7 +404,6 @@ button:focus-visible {
 
 .botao-cadastrar {
     width: 100%;
-    margin-top: 4px;
 }
 
 .success-snackbar {

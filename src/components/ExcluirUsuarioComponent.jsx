@@ -7,8 +7,8 @@ function ExcluirUsusarioComponent({ usuario, onFecharDetalhes, onExcluirUsuario 
                 Deseja realmente excluir o usuário <strong>{usuario.name}</strong>?
             </p>
 
-            <button onClick={onFecharDetalhes}>Cancelar</button>
-            <button onClick={() => onExcluirUsuario(usuario.id)}>Ok</button>
+            <button className="botao-cancelar" onClick={onFecharDetalhes}>Cancelar</button>
+            <button className="botao-confirmar-exclusao" onClick={() => onExcluirUsuario(usuario.id)}>Ok</button>
         </div>
     )
 }

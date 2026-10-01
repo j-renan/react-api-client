@@ -2,7 +2,7 @@ function UserDetailsComponent({ usuario, onFecharDetalhes }) {
     return(
         <div>
             <h2>Detalhes do usuário</h2>
-            <button onClick={onFecharDetalhes}>Fechar detalhes</button>
+            <button className="botao-fechar-detalhes" onClick={onFecharDetalhes}>Fechar detalhes</button>
             <p>
                 <strong>Nome: </strong>{usuario.name}
             </p>

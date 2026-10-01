@@ -18,13 +18,14 @@ function UserCardComponent({ usuario, onSelecionarUsuario, onSelecionarUsuarioEx
                 {usuario.email}
             </p>
 
-            <button 
+            <button
+                className="botao-detalhes"
                 onClick={() => {
                     onSelecionarUsuario(usuario.id)
                 }}
             >Ver detalhes</button>
 
-            <button onClick={() => onSelecionarUsuarioExcluir(usuario.id)}>
+            <button className="botao-excluir" onClick={() => onSelecionarUsuarioExcluir(usuario.id)}>
                 Excluir
             </button>
 
