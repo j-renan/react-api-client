@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./components/Loading";
 import ErrorMessage from "./components/ErrorMessage";
-import UserList from "./components/UserList";
+import UserListComponent from "./components/UserListComponent";
 import Header from "./components/Header";
 import UserDetails from "./components/UserDetails";
 import UserForm from "./components/UserForm";
@@ -16,7 +16,7 @@ const filtrarUsuarioPorTermo = (termo) => (usuario) => {
     return (
         usuario.name.toLowerCase().includes(termoLower) ||
         usuario.username.toLowerCase().includes(termoLower) ||
-        usuario.email.toLowerCase().includes(termoLower) 
+        usuario.email.toLowerCase().includes(termoLower)
     );
 };
 
@@ -62,7 +62,7 @@ function App() {
             console.log(
                 "Erro ao buscar usuários:",
                 error
-            );            
+            );
             setErro(
                 `Não foi possível carregar os usuários. Código: ${error.message}`
             );
@@ -89,7 +89,7 @@ function App() {
 
     function limparDetalhesUsuario() {
         setUsuarioSelecionado(null);
-    }    
+    }
 
     async function cadastrarUsuario(usuario) {
         try {
@@ -107,6 +107,10 @@ function App() {
                 error
             );
         }
+    }
+
+    async function excluirUsuario(id) {
+        await console.log(`Excluir usuário com id: ${id}`);
     }
 
     useEffect(() => {
@@ -133,7 +137,7 @@ function App() {
 
             {erro && <ErrorMessage mensagem={erro} />}
 
-            {!carregando && !erro && (                
+            {!carregando && !erro && (
                 <div className="content-grid">
                     <section className="content-column" aria-labelledby="users-heading">
                         <div className="section-heading">
@@ -144,9 +148,10 @@ function App() {
                         </div>
 
                         {usuariosFiltrados.length > 0 ? (
-                            <UserList
+                            <UserListComponent
                                 usuarios={usuariosFiltrados}
                                 onSelecionarUsuario={buscarUsuario}
+                                onExcluirUsuario={buscarUsuario}
                             />
                         ) : (
                             <p className="empty-state">Nenhum usuário encontrado.</p>

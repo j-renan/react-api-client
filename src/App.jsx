@@ -11,6 +11,7 @@ import UserFormComponent from "./components/UserFormComponent";
 import ModalComponent from "./components/ModalComponent";
 import SuccessMessage from "./components/SuccessMessage";
 import NovoUsuarioComponent from "./components/NovoUsuarioComponent";
+import ExcluirUsusarioComponent from "./components/ExcluirUsuarioComponent";
 
 
 const filtrarUsuarioPorTermo = (termo) => (usuario) => {
@@ -30,13 +31,19 @@ function App() {
     const [erro, setErro] = useState(null);
     const [carregando, setCarregando] = useState(true);
     const [busca, setBusca] = useState("");
-    const [usuarioSelecionado, setUsuarioSelecionado] = useState(null)
+    const [usuarioSelecionadoDetalhes, setUsuarioSelecionadoDetalhes] = useState(null)
     const [modalNovoUsuarioAberto, setModalNovoUsuarioAberto] = useState(false)
     const [mensagem, setMensagem] = useState(null);
     const [novoUsuario, setNovoUsuario] = useState(null);
+    const [usuarioSelecionadoExcluir, setUsuarioSelecionadoExcluir] = useState(null);
 
     const usuariosFiltrados = usuarios
         .filter(filtrarUsuarioPorTermo(busca));
+
+    async function selecionarUsuario(id) {
+        const usuario = await buscarUsuario(id)
+        setUsuarioSelecionadoDetalhes(usuario)
+    }
 
     async function buscarUsuario(id) {
         try {
@@ -44,7 +51,8 @@ function App() {
                 `${url}/users/${id}`
             )
             const data = response.data
-            setUsuarioSelecionado(data)
+            // setUsuarioSelecionado(data)
+            return data
         } catch (error) {
             console.log("Erro ao buscar usuário: ", error)
         }
@@ -76,7 +84,7 @@ function App() {
     }
 
     function limparDetalhesUsuario() {
-        setUsuarioSelecionado(null)
+        setUsuarioSelecionadoDetalhes(null)
     }
 
     async function cadastrarUsuario(usuario) {
@@ -95,9 +103,41 @@ function App() {
         }
     }
 
+    async function selecionarUsuarioExcluir(id) {
+        const usuario = await buscarUsuario(id)
+        setUsuarioSelecionadoExcluir(usuario)
+    }
+
+    function cancelarExcluirUsuario() {
+        setUsuarioSelecionadoExcluir(null)
+    }
+
+    async function excluirUsuario(id) {
+        try {
+            await axios.delete(`${url}/users/${id}`)
+            setUsuarios(usuarios.filter((usuario) => usuario.id !== id))
+            setUsuarioSelecionadoExcluir(null)
+            setMensagem("Usuário excluído com sucesso!")
+        } catch (error) {
+            console.log("Erro ao excluir usuário: ", error)
+        }
+    }
+
     useEffect(() => {
         buscarUsuarios();
     }, []);
+
+    useEffect(() => {
+        if (!mensagem) {
+            return undefined;
+        }
+
+        const timeoutId = setTimeout(() => {
+            setMensagem(null);
+        }, 3000);
+
+        return () => clearTimeout(timeoutId);
+    }, [mensagem]);
 
 
     return (
@@ -137,7 +177,8 @@ function App() {
                     {usuariosFiltrados.length > 0 ? (
                         <UserListComponent
                             usuarios={usuariosFiltrados}
-                            onSelecionarUsuario={buscarUsuario}
+                            onSelecionarUsuario={selecionarUsuario}
+                            onSelecionarUsuarioExcluir={selecionarUsuarioExcluir}
                         />
                     ) : (
                         <p className="sem-resultados">
@@ -145,17 +186,23 @@ function App() {
                         </p>
                     )}
 
-                    {usuarioSelecionado && (
+                    {usuarioSelecionadoDetalhes && (
                         <ModalComponent onFechar={limparDetalhesUsuario}>
                             <UserDetailsComponent
-                                usuario={usuarioSelecionado}
+                                usuario={usuarioSelecionadoDetalhes}
                                 onFecharDetalhes={limparDetalhesUsuario}
                             />
-                        </ModalComponent>
+                        </ModalComponent>                        
                     )}
 
-                    {mensagem && (
-                        <SuccessMessage mensagem={mensagem} />
+                    {usuarioSelecionadoExcluir && (
+                        <ModalComponent onFechar={cancelarExcluirUsuario}>
+                            <ExcluirUsusarioComponent
+                                usuario={usuarioSelecionadoExcluir}
+                                onFecharDetalhes={cancelarExcluirUsuario}
+                                onExcluirUsuario={excluirUsuario}
+                            />
+                        </ModalComponent>
                     )}
 
                     {novoUsuario && (
@@ -173,6 +220,8 @@ function App() {
                     <UserFormComponent onCadastrar={cadastrarUsuario} />
                 </ModalComponent>
             )}
+
+            {mensagem && <SuccessMessage mensagem={mensagem} />}
         </div>
     );
 }

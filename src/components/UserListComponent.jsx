@@ -1,6 +1,6 @@
 import UserCardComponent from "./UserCardComponent";
 
-function UserListComponent({ usuarios, onSelecionarUsuario }) {
+function UserListComponent({ usuarios, onSelecionarUsuario, onSelecionarUsuarioExcluir }) {
     return (
         <ul className="lista-usuarios">
 
@@ -9,6 +9,7 @@ function UserListComponent({ usuarios, onSelecionarUsuario }) {
                     key={usuario.id}
                     usuario={usuario}
                     onSelecionarUsuario={onSelecionarUsuario}
+                    onSelecionarUsuarioExcluir={onSelecionarUsuarioExcluir}
                 />
             ))}
 

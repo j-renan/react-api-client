@@ -1,4 +1,4 @@
-function UserCardComponent({ usuario, onSelecionarUsuario }) {
+function UserCardComponent({ usuario, onSelecionarUsuario, onSelecionarUsuarioExcluir }) {
     return (
         <li className="card-usuario">
 
@@ -23,6 +23,10 @@ function UserCardComponent({ usuario, onSelecionarUsuario }) {
                     onSelecionarUsuario(usuario.id)
                 }}
             >Ver detalhes</button>
+
+            <button onClick={() => onSelecionarUsuarioExcluir(usuario.id)}>
+                Excluir
+            </button>
 
         </li>
     );
