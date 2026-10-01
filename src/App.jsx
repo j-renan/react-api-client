@@ -7,16 +7,16 @@ import UserListComponent from "./components/UserListComponent";
 
 import "./App.css";
 import UserDetailsComponent from "./components/UserDetailsComponent";
-import UserFormComponent from "./components/UserFormComponent";
+import CadastrarUsuarioComponent from "./components/CadastrarUsuarioComponent";
 import ModalComponent from "./components/ModalComponent";
 import SuccessMessage from "./components/SuccessMessage";
 import NovoUsuarioComponent from "./components/NovoUsuarioComponent";
 import ExcluirUsusarioComponent from "./components/ExcluirUsuarioComponent";
+import EditarUsuarioComponent from "./components/EditarUsuarioComponent";
 
 
 const filtrarUsuarioPorTermo = (termo) => (usuario) => {
     const termoLower = termo.toLowerCase();
-    console.log("Filtrando usuário: ", usuario, " com termo: ", termoLower);
     return (
         usuario.name.toLowerCase().includes(termoLower) ||
         usuario.username.toLowerCase().includes(termoLower) ||
@@ -37,6 +37,8 @@ function App() {
     const [mensagem, setMensagem] = useState(null);
     const [novoUsuario, setNovoUsuario] = useState(null);
     const [usuarioSelecionadoExcluir, setUsuarioSelecionadoExcluir] = useState(null);
+    const [modalEditarUsuarioAberto, setModalEditarUsuarioAberto] = useState(false)
+    const [usuarioSelecionadoEditar, setUsuarioSelecionadoEditar] = useState(null)
 
     const usuariosFiltrados = usuarios
         .filter(filtrarUsuarioPorTermo(busca));
@@ -118,8 +120,22 @@ function App() {
             setUsuarios(usuarios.filter((usuario) => usuario.id !== id))
             setUsuarioSelecionadoExcluir(null)
             setMensagem("Usuário excluído com sucesso!")
+            setModalEditarUsuarioAberto(false)
         } catch (error) {
             console.log("Erro ao excluir usuário: ", error)
+        }
+    }
+
+    async function editarUsuario(id, usuarioAtualizado) {
+        console.log("editarUsuario - id: ", id, " usuarioAtualizado: ", usuarioAtualizado);
+        try {
+            const response = await axios.put(`${url}/users/${id}`, usuarioAtualizado)
+            const data = response.data
+            setUsuarios(usuarios.map((usuario) => usuario.id === id ? data : usuario))
+            setMensagem("Usuário editado com sucesso!")
+            setModalEditarUsuarioAberto(false)
+        } catch (error) {
+            console.log("Erro ao editar usuário: ", error)
         }
     }
 
@@ -194,6 +210,8 @@ function App() {
                             <UserDetailsComponent
                                 usuario={usuarioSelecionadoDetalhes}
                                 onFecharDetalhes={limparDetalhesUsuario}
+                                setModalEditarUsuarioAberto={setModalEditarUsuarioAberto}
+                                setUsuarioSelecionadoEditar={setUsuarioSelecionadoEditar}
                             />
                         </ModalComponent>                        
                     )}
@@ -217,10 +235,20 @@ function App() {
 
             {modalNovoUsuarioAberto && (
                 <ModalComponent
-                    titulo="Novo usuário"
                     onFechar={() => setModalNovoUsuarioAberto(false)}
                 >
-                    <UserFormComponent onCadastrar={cadastrarUsuario} />
+                    <CadastrarUsuarioComponent onCadastrar={cadastrarUsuario} />
+                </ModalComponent>
+            )}
+
+            {modalEditarUsuarioAberto && (
+                <ModalComponent
+                    onFechar={() => setModalEditarUsuarioAberto(false)}
+                >
+                    <EditarUsuarioComponent 
+                        onEditar={editarUsuario} 
+                        usuarioSelecionadoEditar={usuarioSelecionadoEditar}
+                    />
                 </ModalComponent>
             )}
 

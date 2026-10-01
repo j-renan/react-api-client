@@ -1,22 +1,23 @@
 import { useState } from "react";
 import FormUsuarioComponent from "./FormUsuarioComponent";
 
-function UserFormComponent({ onCadastrar }){
-    const [nome, setNome] = useState("")
-    const [username, setUsername] = useState("")
-    const [email, setEmail] = useState("")
-    const [telefone, setTelefone] = useState("")
+function EditarUsuarioComponent({ onEditar, usuarioSelecionadoEditar }){
+    console.log("EditarUsuarioComponent - usuarioSelecionadoEditar: ", usuarioSelecionadoEditar);
+    const [nome, setNome] = useState(usuarioSelecionadoEditar?.name || "")
+    const [username, setUsername] = useState(usuarioSelecionadoEditar?.username || "")
+    const [email, setEmail] = useState(usuarioSelecionadoEditar?.email || "")
+    const [telefone, setTelefone] = useState(usuarioSelecionadoEditar?.phone || "")
 
     function handleSubmit(evento) {
         evento.preventDefault()
-        const novoUsuario = {
+        const usuarioEditado = {
             name: nome,
             username: username,
             email: email,
             phone: telefone
         }
 
-        onCadastrar(novoUsuario)
+        onEditar(usuarioSelecionadoEditar.id, usuarioEditado)
         limparFormulario()
     }
 
@@ -30,8 +31,8 @@ function UserFormComponent({ onCadastrar }){
     return (
         <FormUsuarioComponent
             usuario={{ name: nome, username: username, email: email, phone: telefone }}
-            textHeader="Cadastroooooooooooooooooo"
-            textTitle="Novo usuário"
+            textHeader="Editar"
+            textTitle="Editar Dados do usuário"
             setNome={setNome}
             setUsername={setUsername}
             setEmail={setEmail}
@@ -41,4 +42,4 @@ function UserFormComponent({ onCadastrar }){
     )
 }
 
-export default UserFormComponent
+export default EditarUsuarioComponent

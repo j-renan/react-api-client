@@ -1,5 +1,3 @@
-//import FormUsuarioComponent from "./FormUsuarioComponent";
-
 function NovoUsuarioComponent({ novoUsuario }) {
     const campos = [
         { rotulo: "Nome", valor: novoUsuario?.name },
@@ -8,13 +6,6 @@ function NovoUsuarioComponent({ novoUsuario }) {
     ];
 
     return (
-        // <FormUsuarioComponent
-        //     usuario={novoUsuario}
-        //     textHeader="Cadastrooooooooooooooooooooooooooooooooooooooooo"
-        //     textTitle="Novo usuário"
-        //     textMessage="Nenhum usuário foi cadastrado nesta sessão ainda."
-        // />
-
         <section className="novo-usuario" aria-labelledby="novo-usuario-titulo">
             <p className="novo-usuario__sobretitulo">Cadastro</p>
             <h2 id="novo-usuario-titulo">Novo usuário</h2>

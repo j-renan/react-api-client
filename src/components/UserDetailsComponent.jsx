@@ -1,4 +1,6 @@
-function UserDetailsComponent({ usuario, onFecharDetalhes }) {
+function UserDetailsComponent({ usuario, onFecharDetalhes, setModalEditarUsuarioAberto, setUsuarioSelecionadoEditar }) {
+    
+
     return(
         <div>
             <h2>Detalhes do usuário</h2>
@@ -22,6 +24,12 @@ function UserDetailsComponent({ usuario, onFecharDetalhes }) {
             <p>
                 <strong>Website: </strong>{usuario.website}
             </p>
+            <button className="botao-fechar-detalhes" onClick={() => {
+                    setModalEditarUsuarioAberto(true)
+                    setUsuarioSelecionadoEditar(usuario)
+                }
+            }>Editar</button>
+
         </div>
     )
 }
